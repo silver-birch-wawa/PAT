@@ -7,6 +7,6 @@ int gcd(int a, int b){
   }
 }
 int main(int argc, char const *argv[]) {
-  printf("%d\n",gcd(24,16));
+  printf("%d\n",gcd(24,36));
   return 0;
 }
