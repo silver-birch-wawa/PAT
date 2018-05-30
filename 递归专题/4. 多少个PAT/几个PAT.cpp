@@ -1,11 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
-int N=100000;
-int A[10000]={0};
+#define N 100000
+int A[100000]={0};
 //int T[N]={0};
 int main() {
   int i,j,k;
   char a[N]="APPAPT";
+  scanf("%s",a);
   //scanf("%s",a);
   int p=0,t=0;
   long long count=0;
@@ -26,6 +27,6 @@ int main() {
       count+=A[i];
     }
   }
-  printf("\n%ld\n",count%1000000007);
+  printf("%ld",count%1000000007);
   return 0;
 }
