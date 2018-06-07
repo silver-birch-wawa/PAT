@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+// 必须从左到右计算，从右到左，则3*9/4变成了4/9*3；所以得恢复栈的顺序。
 void ftoa(float f,char a[],int m){
   sprintf(a, "%f", f); //将10.8转为字符串
 }
