@@ -21,7 +21,7 @@ Node *create(int PL,int PR,int IL,int IR){
     for(i=IL;i<=IR;i++){
         if(rt==inorder[i]){
             Iroot=i;
-            cout<<"Iroot:"<<i<<endl;
+            //cout<<"Iroot:"<<i<<endl;
             break;
         }
     }
@@ -29,8 +29,8 @@ Node *create(int PL,int PR,int IL,int IR){
     int il=i+1;
     Node* root=new Node();
     root->num=rt;
-    cout<<PL<<" "<<ir-IL+PL<<" "<<IL<<" "<<ir-1<<endl;
-    cout<<ir-IL+PL+1<<" "<<PR-1<<" "<<il<<" "<<IR<<endl;
+    //cout<<PL<<" "<<ir-IL+PL<<" "<<IL<<" "<<ir-1<<endl;
+    //cout<<ir-IL+PL+1<<" "<<PR-1<<" "<<il<<" "<<IR<<endl;
     root->left=create(PL,ir-IL+PL,IL,ir);
     root->right=create(ir-IL+PL+1,PR-1,il,IR);
     return root;
