@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-string s[100];
 typedef struct{
   int sum;
   bool passby;
@@ -12,7 +11,6 @@ typedef struct{
   // }
 }Node;
 
-vector<vector<Node> >root;
 int circle=0;
 
 void insert(vector<vector<Node>>&root,int point,int num){
@@ -35,7 +33,6 @@ void print(vector<vector<Node>>root){
 }
 void DFS(vector<vector<Node>>&root,int begin,int &head,int &len,int &sum){
   int i,j;
-  Node p;
 
   for(i=1;i<root[begin].size();i++){
     // cout<<"------------"<<begin<<endl;
@@ -53,7 +50,16 @@ void DFS(vector<vector<Node>>&root,int begin,int &head,int &len,int &sum){
     }
   }
 }
+struct res{
+  int len;
+  string ans;
+};
+bool cmp(res s1,res s2){
+  return  s1.ans[0]<s2.ans[0];
+}
 int main(){
+  vector<vector<Node>>root;
+  string s[100];
   int i,K=0;
   map<string,int>m;
   scanf("%d %d",&circle,&K);
@@ -63,21 +69,21 @@ int main(){
 
   int signal=1;
 
-  // ĞèÒª±ÈÕı³£¶à²åÈëÒ»¸övector
+  // éœ€è¦æ¯”æ­£å¸¸å¤šæ’å…¥ä¸€ä¸ªvector
   for(i=0;i<circle+1;i++){
     vector<Node>v;
     Node node;
     node.num=i;
     node.sum=0;
     node.passby=false;
-    // ÀíÂÛÉÏÄ¬ÈÏÎª0µ«ÊÇÃ»ÓĞµ÷ÓÃ¹¹Ôìº¯ÊıÖ»ÄÜ×Ô¼ºÖÃÎª0ÁË
+    // ç†è®ºä¸Šé»˜è®¤ä¸º0ä½†æ˜¯æ²¡æœ‰è°ƒç”¨æ„é€ å‡½æ•°åªèƒ½è‡ªå·±ç½®ä¸º0äº†
     v.push_back(node);
     root.push_back(v);
   }
 
   string str1,str2;
 
-  // ÒòÎª×ÖµänullÎª0£¬ËùÒÔÒª´Ó1¿ªÊ¼±àºÅ£¬ËùÒÔĞèÒªnum+1³¤¶ÈµÄÊı×é£¬±éÀúÒ²Òª´Ó1¿ªÊ¼¡£
+  // å› ä¸ºå­—å…¸nullä¸º0ï¼Œæ‰€ä»¥è¦ä»1å¼€å§‹ç¼–å·ï¼Œæ‰€ä»¥éœ€è¦num+1é•¿åº¦çš„æ•°ç»„ï¼Œéå†ä¹Ÿè¦ä»1å¼€å§‹ã€‚
   for(i=0;i<circle;i++){
     scanf("%s %s %d",a,b,&input);
     str1=a;
@@ -102,8 +108,7 @@ int main(){
   }
   int head=0,len=0,sum=0;
 
-  vector<string>ss;
-  vector<int>ii;
+  vector<res>ss;
 
   for(i=1;i<circle+1;i++){
     head=i;
@@ -113,8 +118,12 @@ int main(){
 
     DFS(root,i,head,len,sum);
     if(sum>K*2&&len>2){
-      ss.push_back(s[head]);
-      ii.push_back(len);
+      res r;
+      r.len=len;
+      r.ans=s[head];
+      ss.push_back(r);
+      // ss.push_back(s[head]);
+      // ii.push_back(len);
       // cout<<s[i]<<" "<<len<<endl;
       // cout<<"start:"<<s[i]<<endl;
       // cout<<"head:"<<s[head]<<endl;
@@ -125,12 +134,17 @@ int main(){
     }
     //print(root);
   }
-  cout<<ss.size()<<endl;
-  for(i=0;i<ss.size();i++){
-    cout<<ss[i]<<" "<<ii[i]<<endl;
-  }
   if(ss.size()==0){
     cout<<0;
+    return 0;
   }
+  cout<<ss.size()<<endl;
+
+  sort(ss.begin(),ss.end(),cmp);
+
+  for(i=0;i<ss.size();i++){
+    cout<<ss[i].ans<<" "<<ss[i].len<<endl;
+  }
+
   // print(root);
 }
