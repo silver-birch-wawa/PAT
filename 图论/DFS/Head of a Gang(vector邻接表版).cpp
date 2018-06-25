@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+// 设计思路： 第一列[0]记录权值和bool，[1]->[...]作为跳转链接，标记num
 typedef struct{
   int sum;
   bool passby;
@@ -33,20 +34,25 @@ void print(vector<vector<Node>>root){
 }
 void DFS(vector<vector<Node>>&root,int begin,int &head,int &len,int &sum){
   int i,j;
+  queue<int>q;
+  q.push(begin);
+  while(!q.empty()){
+    begin=q.front();
+    q.pop();
+    for(i=1;i<root[begin].size();i++){
+      // cout<<"------------"<<begin<<endl;
+      if(root[root[begin][i].num][0].passby==false){
+        //cout<<"++++++++++++++++"<<endl;
+        sum+=root[root[begin][i].num][0].sum;
+        len++;
+        root[root[begin][i].num][0].passby=true;
 
-  for(i=1;i<root[begin].size();i++){
-    // cout<<"------------"<<begin<<endl;
-    if(root[root[begin][i].num][0].passby==false){
-      //cout<<"++++++++++++++++"<<endl;
-      sum+=root[root[begin][i].num][0].sum;
-      len++;
-      root[root[begin][i].num][0].passby=true;
-
-      if(root[root[begin][i].num][0].sum>root[head][0].sum){
-        head=root[begin][i].num;
+        if(root[root[begin][i].num][0].sum>root[head][0].sum){
+          head=root[begin][i].num;
+        }
+        //begin=root[begin][i].num;
+        q.push(root[begin][i].num);
       }
-
-      DFS(root,root[begin][i].num,head,len,sum);
     }
   }
 }
@@ -55,17 +61,23 @@ struct res{
   string ans;
 };
 bool cmp(res s1,res s2){
-  return  s1.ans[0]<s2.ans[0];
+  int i=0;
+  for(i=0;i<max(s1.ans.size(),s2.ans.size());i++){
+        if(s1.ans[i]!=s2.ans[i]){
+           return  s1.ans[i]<s2.ans[i];
+        }
+  }
+  return true;
 }
 int main(){
   vector<vector<Node>>root;
-  string s[100];
+  string s[30000];
   int i,K=0;
   map<string,int>m;
   scanf("%d %d",&circle,&K);
 
   int input;
-  char a[100],b[100];
+  char a[30000],b[30000];
 
   int signal=1;
 
@@ -124,7 +136,7 @@ int main(){
       ss.push_back(r);
       // ss.push_back(s[head]);
       // ii.push_back(len);
-      // cout<<s[i]<<" "<<len<<endl;
+      //cout<<s[i]<<" "<<len<<endl;
       // cout<<"start:"<<s[i]<<endl;
       // cout<<"head:"<<s[head]<<endl;
       // cout<<"len:"<<len<<endl;
