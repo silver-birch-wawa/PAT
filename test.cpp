@@ -74,21 +74,21 @@ int main(){
 
   int signal=1;
 
-  // 需要比正常多插入一个vector
+  // 锟斤拷要锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷一锟斤拷vector
   for(i=0;i<circle+1;i++){
     vector<Node>v;
     Node node;
     node.num=i;
     node.sum=0;
     node.passby=false;
-    // 理论上默认为0但是没有调用构造函数只能自己置为0了
+    // 锟斤拷锟斤拷锟斤拷默锟斤拷为0锟斤拷锟斤拷没锟叫碉拷锟矫癸拷锟届函锟斤拷只锟斤拷锟皆硷拷锟斤拷为0锟斤拷
     v.push_back(node);
     root.push_back(v);
   }
 
   string str1,str2;
 
-  // 因为字典null为0，所以要从1开始编号，所以需要num+1长度的数组，遍历也要从1开始。
+  // 锟斤拷为锟街碉拷null为0锟斤拷锟斤拷锟斤拷要锟斤拷1锟斤拷始锟斤拷锟脚ｏ拷锟斤拷锟斤拷锟斤拷要num+1锟斤拷锟饺碉拷锟斤拷锟介，锟斤拷锟斤拷也要锟斤拷1锟斤拷始锟斤拷
   for(i=0;i<circle;i++){
     scanf("%s %s %d",&a,&b,&input);
     str1=a;
