@@ -1,63 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef struct{
-  int num;      // 在BFS中第一列[0]中作为记录上次遍历的位置
+  int num;
+  // 在BFS中第一列v[i][0].num中作为记录上次遍历的位置
   int value;
-  bool isOccupy;
-  // 在邻接表中用于避免BFS重复遍历，永久标记。第一列作为完全遍历的标记
+  // 长度等权值
 }Node;
+
 #define N 1000
 bool isOccupy[N]={false};
-// 防回环的临时标记，用于当前BFS试错中选中的节点标记，在pop栈后恢复为false。
-void show(vector<vector<Node>>v){
-  int i;
-  cout<<"isOcuupy:";
-  for(i=0;i<10;i++){
-    cout<<isOccupy[i];
-  }
-  cout<<endl;
-  cout<<"num:";
-  for(i=0;i<v.size();i++){
-    cout<<v[i][0].num;
-  }
-  cout<<endl;
-}
+// 防回环的临时标记，用于当前BFS前进试错中选中的节点标记，在pop栈后恢复为false。
+
 int choose(vector<vector<Node>>&v,int points){
   int i=0;
   int choosed=-1;
 
-  // cout<<"111111"<<endl;
-  // cout<<"points:"<<points<<endl;
-  // cout<<"from:"<<v[points][0].num<<endl;
-  // cout<<"size:"<<v[points].size()<<endl;
+  // 之前遍历结束时v[points][0].num置为满，回退的过程中抑制延伸返回-1，把突出部位回退。
+  // 但是当从别的路径遍历过来的时候v[points][0].num需要恢复为0。
+  // 这样的标记设计避免了bool的使用而且记住了上一次操作的位置
 
-  show(v);
-  // 之前遍历结束时v[points][0].num置为满，回退的过程中抑制延伸返回-1。
-  // 但是当从别的路径遍历过来的时候需要恢复为0。
-  for(i=v[points][0].num+1;i<v[points].size();i++){  // 跳过之前遍历过的节点
-    cout<<"**************"<<endl;
-    // cout<<"next:"<<v[points][i].num<<endl;
-    // cout<<"isOccupy:"<<isOccupy[v[points][i].num]<<endl;
-    // v[points][i].num对应跳转的下一个节点
-
+  for(i=v[points][0].num+1;i<v[points].size();i++){
+    // 跳过之前遍历过的节点（从0->length遍历，所以i+1就可以跳过之前的所有节点）
     if(isOccupy[v[points][i].num]==false){
-        // cout<<"222222"<<endl;
-        //if(v[points][i].isOccupy==false){
-          // 先确定未被临时占领
           choosed=v[points][i].num;
-          // 修改临时占领标记还有永久标记
+          // 修改临时占领标记
           isOccupy[choosed]=true;
-          //v[points][i].isOccupy=true;
-          // 记录当前遍历到的节点，下次下一个节点开始遍历
+          // 标记当前遍历到的节点位置，下一次就从下一个节点开始遍历
           v[points][0].num=i;
-          cout<<"mark true    "<<points<<":"<<v[points][0].num<<endl;
 
+          // 对于需要再遍历的下一个节点，需要把它的内部指针调回0
           if(v[choosed][0].num==v[choosed].size()-1)
           {
             v[choosed][0].num=0;
           }
           break;  //找到第一个就应该跳出循环了
-        //}
     }
   }
   return choosed;
@@ -69,34 +45,38 @@ void print(vector<int>s){
   }
   cout<<endl;
 }
-// BFS的回退操作
+// BFS的栈回退操作
 void pop_back(vector<int>&s){
   int t=s[s.size()-1];
-  cout<<"\n#####pop:"<<t<<endl;
+  // cout<<"\n#####pop:"<<t<<endl;
   isOccupy[t]=false;
   s.pop_back();
 }
+
 void BFS_path(vector<vector<Node>>&v,int start,int end){
   vector<int>s;  // 用stack模拟栈
   s.push_back(start);
   int path_length=0;
 
   int points,choosed;
+  // 栈不为空时
   while(!s.empty()){
     int points=s[s.size()-1];
+    // 取栈顶元素
     choosed=choose(v,points);
-    cout<<"\n!!!! choosed:"<<choosed<<endl;
+    //cout<<"\n!!!! choosed:"<<choosed<<endl;
     // 在触底的时候
     if(choosed==end){
-      //s.push_back(choosed);
+      s.push_back(choosed);
       print(s);
       pop_back(s);
       isOccupy[choosed]=false;
     }
+    // 在陷入死胡同的时候就需要回退到正确的路上
     else if(choosed==-1){
-      //陷入死胡同的时候就需要回退到正确的路上
       pop_back(s);
     }
+    // 在未到达终点的时候
     else{
       s.push_back(choosed);
     }
@@ -109,13 +89,13 @@ int main(){
   int edges,i,j,points;
   scanf("%d %d",&points,&edges);
 
+  // 初始化第一列的链
   for(i=0;i<points+1;i++){
     vector<Node>vv;
     v.push_back(vv);
     Node node;
     node.num=0;
     node.value=0;
-    node.isOccupy=false;
     v[i].push_back(node);
   }
 
@@ -125,15 +105,11 @@ int main(){
     Node node;
     node.num=b;
     node.value=value;
-    node.isOccupy=false;
     v[a].push_back(node);
-    // cout<<"--------------"<<endl;
   }
 
-  // cout<<"++++++++++++"<<endl;
-
   int start=1;
-  int end=3;
+  int end=9;
   isOccupy[start]=true;
   BFS_path(v,start,end);
 }
