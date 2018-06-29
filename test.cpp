@@ -2,141 +2,83 @@
 using namespace std;
 typedef struct{
   int num;      // 在BFS中第一列[0]中作为记录上次遍历的位置
-  int value;
-  bool isOccupy;
+  int value;    // 长度
+  int people;
+  //bool isOccupy;
   // 在邻接表中用于避免BFS重复遍历，永久标记。第一列作为完全遍历的标记
 }Node;
 #define N 1000
-bool isOccupy[N]={false};
-// 防回环的临时标记，用于当前BFS试错中选中的节点标记，在pop栈后恢复为false。
-void show(vector<vector<Node>>v){
-  int i;
-  cout<<"isOcuupy:";
-  for(i=0;i<10;i++){
-    cout<<isOccupy[i];
-  }
-  cout<<endl;
-  cout<<"num:";
-  for(i=0;i<v.size();i++){
-    cout<<v[i][0].num;
-  }
-  cout<<endl;
+vector<vector<Node>>v;
+int points=0;   // 记录点数
+int dis[N]={0};
+bool occupy[N]={0};
+void insert(vector<vector<Node>>&v,int point1,int point2,int length){
+  Node node;
+  node.num=point1;
+  node.value=length;
+  v[point2].push_back(node);
+  node.num=point2;
+  v[point1].push_back(node);
 }
-int choose(vector<vector<Node>>&v,int points){
-  int i=0;
+int choose(vector<vector<Node>>&v,vector<int>q){
+  int i,j;
+  int min_length=1000000;
   int choosed=-1;
-
-  // cout<<"111111"<<endl;
-  // cout<<"points:"<<points<<endl;
-  // cout<<"from:"<<v[points][0].num<<endl;
-  // cout<<"size:"<<v[points].size()<<endl;
-
-  show(v);
-  // 之前遍历结束时v[points][0].num置为满，回退的过程中抑制延伸返回-1。
-  // 但是当从别的路径遍历过来的时候需要恢复为0。
-  for(i=v[points][0].num+1;i<v[points].size();i++){  // 跳过之前遍历过的节点
-    cout<<"**************"<<endl;
-    // cout<<"next:"<<v[points][i].num<<endl;
-    // cout<<"isOccupy:"<<isOccupy[v[points][i].num]<<endl;
-    // v[points][i].num对应跳转的下一个节点
-
-    if(isOccupy[v[points][i].num]==false){
-        // cout<<"222222"<<endl;
-        //if(v[points][i].isOccupy==false){
-          // 先确定未被临时占领
-          choosed=v[points][i].num;
-          // 修改临时占领标记还有永久标记
-          isOccupy[choosed]=true;
-          //v[points][i].isOccupy=true;
-          // 记录当前遍历到的节点，下次下一个节点开始遍历
-          v[points][0].num=i;
-          cout<<"mark true    "<<points<<":"<<v[points][0].num<<endl;
-
-          if(v[choosed][0].num==v[choosed].size()-1)
-          {
-            v[choosed][0].num=0;
-          }
-          break;  //找到第一个就应该跳出循环了
-        //}
+  for(j=0;j<q.size();j++){
+    int point=q[j];
+    for(i=0;i<v[point].size();i++){
+      if(occupy[v[point][i].num]==false){
+        if(v[point][i].value+dis[point]<min_length){
+          min_length=v[point][i].value;
+          choosed=v[point][i].num;
+        }
+      }
     }
+  }
+  if(choosed!=-1){
+    occupy[choosed]=true;
   }
   return choosed;
 }
-void print(vector<int>s){
-  int i;
-  for(i=0;i<s.size();i++){
-    cout<<">>"<<s[i];
-  }
-  cout<<endl;
-}
-// BFS的回退操作
-void pop_back(vector<int>&s){
-  int t=s[s.size()-1];
-  cout<<"\n#####pop:"<<t<<endl;
-  isOccupy[t]=false;
-  s.pop_back();
-}
-void BFS_path(vector<vector<Node>>&v,int start,int end){
-  vector<int>s;  // 用stack模拟栈
-  s.push_back(start);
-  int path_length=0;
-
-  int points,choosed;
-  while(!s.empty()){
-    int points=s[s.size()-1];
-    choosed=choose(v,points);
-    cout<<"\n!!!! choosed:"<<choosed<<endl;
-    // 在触底的时候
-    if(choosed==end){
-      //s.push_back(choosed);
-      print(s);
-      pop_back(s);
-      isOccupy[choosed]=false;
-    }
-    else if(choosed==-1){
-      //陷入死胡同的时候就需要回退到正确的路上
-      pop_back(s);
+void Dijkstra_improve(vector<vector<Node>>&v,int begin,int end,int numbers,int max_group){
+  int i,j;
+  int choosed;
+  vector<int>q;
+  q.push_back(begin);
+  occupy[begin]=true;
+  while(q.size()!=points){
+    choosed=choose(v,q);
+    if(choosed==-1){
+      break;
     }
     else{
-      s.push_back(choosed);
+      cout<<">>"<<choosed<<"  ";
+      q.push_back(choosed);
     }
   }
 }
 int main(){
-  vector<vector<Node>>v;
-  // 用来存储已占领的节点，用于后面遍历邻接未占领节点
-  // 第一行废弃，第二行开始第一列用于标记是否后续已占满，只有后面用于记录value边权值还有num后继节点
-  int edges,i,j,points;
-  scanf("%d %d",&points,&edges);
-
-  for(i=0;i<points+1;i++){
+  int edges,point;
+  int begin,end;
+  scanf("%d %d %d %d",&points,&edges,&begin,&end);
+  int i,j;
+  for(i=0;i<points;i++){
+    scanf("%d",&point);
     vector<Node>vv;
     v.push_back(vv);
-    Node node;
-    node.num=0;
-    node.value=0;
-    node.isOccupy=false;
-    v[i].push_back(node);
   }
-
-  int a,b,value;
-  for(j=0;j<edges;j++){
-    scanf("%d %d %d",&a,&b,&value);
+  int point1,point2,length;
+  for(i=0;i<edges;i++){
+    scanf("%d %d %d",&point1,&point2,&length);
     Node node;
-    node.num=b;
-    node.value=value;
-    node.isOccupy=false;
-    v[a].push_back(node);
-    // cout<<"--------------"<<endl;
+    insert(v,point1,point2,length);
   }
-
-  // cout<<"++++++++++++"<<endl;
-
-  int start=1;
-  int end=3;
-  isOccupy[start]=true;
-  BFS_path(v,start,end);
+  int numbers;
+  int max_group;
+  Dijkstra_improve(v,begin,end,numbers,max_group);
+  cout<<"end......"<<endl;
 }
+
 
 /*
 7 8
