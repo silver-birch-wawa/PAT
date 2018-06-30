@@ -7,7 +7,7 @@ typedef struct{
   //bool isOccupy;
   // 在邻接表中用于避免BFS重复遍历，永久标记。第一列作为完全遍历的标记
 }Node;
-#define N 1000
+#define N 10000
 vector<vector<Node>>v;
 vector<vector<int>>parent;
 int points=0;   // 记录点数
@@ -41,7 +41,7 @@ int choose(vector<vector<Node>>&v,vector<int>q){
   int record_father=0;
   int record_son=0;
 
-  //vector<int>fathers;// 这一轮遍历下来你可能会有很多爸爸
+  vector<int>fathers;// 这一轮遍历下来你可能会有很多爸爸
 
   for(j=0;j<q.size();j++){
     int point=q[j];
@@ -60,14 +60,16 @@ int choose(vector<vector<Node>>&v,vector<int>q){
           record_father=point;
 
           // 改了就不认以前的爸爸们了
-          //fathers.clear();
-          parent[v[point][i].num].clear();
-          parent[v[point][i].num].push_back(point);
+          fathers.clear();
         }
         // 对路径长度相同的父节点进行记录，添加到parent中
         else if(v[point][i].value+dis[point]==min_length){
           // 对于最小距离节点进行切换的情况需要clear,不换的话就把二爸爸三爸爸放fathers[]里存起来
-          record(parent,point,v[point][i].num);
+          if(v[point][i].num==choosed){
+            // 在加入新节点的时候要注意儿子要一样，因为爸爸们要放在同一个儿子的节点的记录上
+            // 书上是不管三七二十一加到parent上，反正最短的时候会清零。
+            fathers.push_back(point);
+          }
         }
       }
     }
@@ -77,6 +79,12 @@ int choose(vector<vector<Node>>&v,vector<int>q){
     dis[choosed]=distance;
     // 标记占领
     occupy[choosed]=true;
+    // 把二爸爸们记录在parent[]里面
+    for(i=0;i<fathers.size();i++){
+      record(parent,fathers[i],record_son);
+    }
+    // 把爸爸记录在parent[]里面
+    record(parent,record_father,record_son);
   }
   return choosed;
 }
