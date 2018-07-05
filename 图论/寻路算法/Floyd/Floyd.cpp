@@ -9,6 +9,8 @@ const int INF=10000000;
 int dis[N][N]={0};           // 记录到源点的距离
 int points=0;                // 记录点数
 int edges=0,begining,ending;
+
+// 注意：样例输入是从1开始的不是2
 void Floyd(){
   int i,j,k;
   for(k=1;k<points+1;k++){
