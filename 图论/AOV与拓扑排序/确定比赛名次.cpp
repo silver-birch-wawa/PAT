@@ -9,7 +9,6 @@ void toposort(vector<vector<int>>&v){
   priority_queue<int,vector<int>,greater<int>>p;
   vector<int>ans;
   int i,j;
-  int counts=0;
   while(1){
     for(i=1;i<points+1;i++){
       if(degree[i]==0&&occupy[i]==false){
