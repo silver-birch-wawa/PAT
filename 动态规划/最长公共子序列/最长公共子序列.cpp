@@ -6,6 +6,25 @@ char a[N];
 char b[N];
 // char数组从0开始，dp从1开始，要注意
 int dp[N][N]={0};
+// 根据原操作逆向出原路径。
+void chase_path(int x,int y){
+  cout<<"path: ";
+  while(y>=1&&x>=1){
+    if(a[x-1]==b[y-1]){
+      cout<<a[x-1]<<">>";
+      x--;
+      y--;
+    }
+    else{
+      if(dp[x-1][y]>dp[x][y-1]){
+        x--;
+      }
+      else{
+        y--;
+      }
+    }
+  }
+}
 int main() {
   int i,j;
   scanf("%s %s",&a,&b);
@@ -18,15 +37,16 @@ int main() {
       if(a[i-1]==b[j-1]){
         // char数组从0开始，所以要a/b要-1
         dp[i][j]=dp[i-1][j-1]+1;
-        // 在ij未放入的时候最优基础上+1
+        // 在ij未放入的时候最优基础(i-1,j-1)上+1
       }
       else{
         dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
-        // 如果i，j放了跟没放一样，那么就跟dp[i][j-1]/dp[i-1][j]一样了
+        // 如果i，j放了跟没放一样，那么就跟dp[i][j-1]/dp[i-1][j]一样了(推理见blog)
       }
     }
   }
-  cout<<"\nCommon Length:"<<dp[len_a][len_b];
+  cout<<"\nCommon Length:"<<dp[len_a][len_b]<<endl;
+  chase_path(len_a,len_b);
   return 0;
 }
 
