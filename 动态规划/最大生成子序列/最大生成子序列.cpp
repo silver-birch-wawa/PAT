@@ -4,6 +4,25 @@ using namespace std;
 int points,edges;
 int MAX[N]={0};
 int num[N]={0};
+int findstart(int end,int maxsum){
+  int i=0;
+  int start=0;
+  // for(start=0;start<=end;start++){
+  //   int sum=0;
+  //   for(i=start;i<=end;i++){
+  //     sum+=num[i];
+  //     if(sum==maxsum){
+  //       return start;
+  //     }
+  //   }
+  // }
+  // 只要从后往前选择第一个MAX[i]==num[i]的就好
+  for(i=end;i>=0;i--){
+    if(num[i]==MAX[i]){
+      return i;
+    }
+  }
+}
 int main(){
   int i=0,j,input,length=0;
   scanf("%d",&length);
@@ -36,12 +55,17 @@ int main(){
       end_point=i;
     }
   }
-  cout<<"max:"<<max_sum<<endl;
+
+  int start=findstart(end_point,max_sum);
+
+  cout<<"start:"<<start+1<<endl;
   cout<<"end_point:"<<end_point+1<<endl;
+  cout<<"max:"<<max_sum<<endl;
 }
 
 
 /*
+10
 1 8 -2 10 8 -4 7 5 -29 10
 33
 */
