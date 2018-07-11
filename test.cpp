@@ -1,55 +1,43 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define N 1000
-char input[N];
-vector<vector<int>>v;
-// 记录回文产生的起点与终点
-void record(int start,int end){
-  v[start].push_back(end);
-}
-void show(int start,int end){
-  int i;
-  cout<<"start from:"<<start<<endl;
-  for(i=start;i<=end;i++){
-    cout<<input[i]<<">>";
-  }
-  cout<<endl;
-}
-void single(char input[],int middle){
-  int i,j;
-  for(i=1;i<middle+1;i++){
-    if(input[middle-i]==input[middle+i]){
-      //continue;
-    }else{
-      if(i>1){
-        record(middle-i+1,middle+i-1);
-      }
-      break;
-    }
-  }
-}
-// void double(char input[],int middle1,int middle2){
-//
-// }
+int bags[N]={0};
+int goods,volumns;
+int value[N]={0};
+int weight[N]={0};
+bool path[N][N]={false};
 int main(){
-  scanf("%s",&input);
-  int length=strlen(input);
   int i,j;
-  for(i=0;i<length;i++){
-    //single(input,i);
-    vector<int>vv;
-    v.push_back(vv);
+  //scanf("%d %d",&goods,&volumns);
+  scanf("%d %d",&volumns,&goods);
+  int w,v;
+  for(i=0;i<goods;i++){
+    scanf("%d %d",&w,&v);
+    value[i]=v;
+    weight[i]=w;
   }
-  for(i=0;i<length;i++){
-    single(input,i);
-  }
-  for(i=0;i<length;i++){
-    if(!v[i].empty()){
-      for(j=0;j<v[i].size();j++){
-        show(i,v[i][j]);
-      }
+  for(i=0;i<goods;i++){
+    for(j=weight[i];j<volumns+1;j++){
+        //bags[j]=max(bags[j],bags[j-weight[i]]+value[i]);
+        if(bags[j]<bags[j-weight[i]]+value[i]){
+          bags[j]=bags[j-weight[i]]+value[i];
+          path[i][j]=true;
+        }
     }
   }
+  int x=goods-1,y=volumns;
+  v=bags[volumns];
+  while(x>=0&&y>=0&&v>=0){
+    if(path[x][y]==true){
+      cout<<">>"<<x;
+      y-=weight[x];
+      v-=value[x];
+    }
+    else{
+      x--;
+    }
+  }
+  cout<<"\nmax value:"<<bags[volumns]<<endl;
 }
 
 /*
