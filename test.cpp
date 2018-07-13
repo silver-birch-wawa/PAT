@@ -1,45 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define N 1000
-int bags[N]={0};
-int goods,volumns;
-int value[N]={0};
-int weight[N]={0};
-bool path[N][N]={false};
+int dp[N]={0};
+char a[N];
+char b[N];
 int main(){
   int i,j;
-  //scanf("%d %d",&goods,&volumns);
-  scanf("%d %d",&volumns,&goods);
-  int w,v;
-  for(i=0;i<goods;i++){
-    scanf("%d %d",&w,&v);
-    value[i]=v;
-    weight[i]=w;
-  }
-  for(i=0;i<goods;i++){
-    for(j=weight[i];j<volumns+1;j++){
-        //bags[j]=max(bags[j],bags[j-weight[i]]+value[i]);
-        if(bags[j]<bags[j-weight[i]]+value[i]){
-          bags[j]=bags[j-weight[i]]+value[i];
-          path[i][j]=true;
+  int max_length=0;
+  scanf("%s",&a);
+  //getchar();
+  scanf("%s",&b);
+  int len_a=strlen(a);
+  int len_b=strlen(b);
+  int end_a=0;
+  int end_b=0;
+  for(i=1;i<len_a+1;i++){
+    for(j=len_b;j>=1;j--){
+      if(a[i-1]==b[j-1]){
+        dp[j]=dp[j-1]+1;
+        if(max_length<dp[j]){
+          max_length=dp[j];
+          end_a=i;
+          end_b=j;
         }
+        // else{
+        //   dp[]
+        // }
+      }
     }
   }
-  int x=goods-1,y=volumns;
-  v=bags[volumns];
-  while(x>=0&&y>=0&&v>=0){
-    if(path[x][y]==true){
-      cout<<">>"<<x;
-      y-=weight[x];
-      v-=value[x];
-    }
-    else{
-      x--;
-    }
+  for(i=end_a-1;i>end_a-1-max_length;i--){
+    cout<<">>"<<a[i];
   }
-  cout<<"\nmax value:"<<bags[volumns]<<endl;
+  cout<<"max:"<<max_length<<endl;
+  cout<<"end:"<<end_a<<"  "<<end_b<<endl;
 }
 
 /*
-abcdcbaded
+absdsdwgf
+89dkdslgldj2
+
+abcdef
+adbcef
 */
