@@ -1,21 +1,22 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define N 1000
+#define N 100010
+// å—çš„å¤§å°
+const int sqrtN=316;
+
 vector<int>s;
 vector<int>res;
 
 int block[N]={0};
-// ´æ´¢¿éµÄÊı¾İ
+// å­˜å‚¨å—çš„æ•°æ®
 int table[N]={0};
-// ´æ´¢¶ÔÓ¦È¡ÖµµÄÊı¾İ
+// å­˜å‚¨å¯¹åº”å–å€¼çš„æ•°æ®
 
-//ËùÓĞ¿éÖĞµÄ×î´óÖµ£¨ÕâÀïÈ¡¸ö±È½Ï´óµÄÊı×÷Îª±ê×¼£©
+//æ‰€æœ‰å—ä¸­çš„æœ€å¤§å€¼ï¼ˆè¿™é‡Œå–ä¸ªæ¯”è¾ƒå¤§çš„æ•°ä½œä¸ºæ ‡å‡†ï¼‰
 int maxnum=100010;
-// ¿éµÄ´óĞ¡
-const int sqrtN=316;
 
 /*
-// ±¾ÀıÊ¹ÓÃ¹Ì¶¨block£¬ËùÒÔ²»ĞèÒªÕâĞ©ÁË
+// æœ¬ä¾‹ä½¿ç”¨å›ºå®šblockï¼Œæ‰€ä»¥ä¸éœ€è¦è¿™äº›äº†
 int getN(int num){
   float m=float(num);
   return int(sqrt(m)+1);
@@ -27,7 +28,7 @@ int getmax(){
   for(i=0;i<length;i++){
     if(maxnum<s[i]){
       maxnum=s[i];
-      // ×î´óÖµ
+      // æœ€å¤§å€¼
     }
     table[s[i]]++;
   }
@@ -86,34 +87,35 @@ void Popup(){
 int main(){
   int i,j;
   int times;
-  // ¿éµÄ´óĞ¡/ÊıÁ¿
-  char input[N];
-  string s;
-  string Pop="Pop";
-  string PeekMedian="PeekMedian";
+  // å—çš„å¤§å°/æ•°é‡
+  char input[100];
+
+  char Pop[]="Pop";
+  char PeekMedian[]="PeekMedian";
   //cout<<getN(9);
-  scanf("%d",&times);
-  fflush(stdin);
+  scanf("%d\n",&times);
+  //fflush(stdin);
   for(i=0;i<times;i++){
     // scanf("%s",s);
-    // scanfÎŞ·¨´¦Àí¿Õ¸ñÔì³ÉµÄ¸ô¶Ï¡£
+    // scanfæ— æ³•å¤„ç†ç©ºæ ¼é€ æˆçš„éš”æ–­ã€‚
     cin.getline(input,N);
-    s=input;
 
-    // ÒªÅĞ¶Ï×Ö·û´®ÏàµÈĞèÒªÓÃstring==string
-    if(s==Pop){
+    // è¦åˆ¤æ–­å­—ç¬¦ä¸²ç›¸ç­‰éœ€è¦ç”¨string==string
+    if(strcmp(input,Pop)==0){
       // pop
       //cout<<"find pop"<<endl;
       Popup();
     }
-    else if(s==PeekMedian){
+    else if(strcmp(input,PeekMedian)==0){
       //cout<<"find PeekMedian"<<endl;
       int peek=findMedian();
       //cout<<"peak:"<<peek<<endl;
     }
     else{
-      // ´¦Àípush
-      int num=atoi(s.substr(4,s.length()-1).c_str());
+      char *p=input;
+      p=p+4;
+      // å¤„ç†push
+      int num=atoi(p);
       //cout<<num<<endl;
       Push(num);
     }
