@@ -29,6 +29,9 @@ int countC(int c){
 }
 // 获取num及之前的A[i]之和
 int getSum(int num){
+  if(sum==0){
+    return 0;
+  }
   int length=num;
   int sum=0;
   while(length>0){
