@@ -1,46 +1,44 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include<map>
 using namespace std;
-#define N 1000
-#define lowbit(i) ((i)&(-i))
-// int maxnum=0;
-int n,m;
-// n 个数，m个输入
-int A[N]={0};
-int C[N]={0};
-void update(int num,int v){
-  int i,j;
-  for(i=num;i<=n;i+=lowbit(i)){
-    C[i]+=v;
-  }
-}
-int sumup(int num){
-  int i,j;
-  int length=num;
-  int sum=0;
-  sum+=A[length];
-  length--;
-  while(length>0){
-    sum+=A[length];
-    length-=lowbit(length);
-  }
-  return sum;
-}
-int sumBetween(int start,int end){
-  return sumup(end)-sumup(start-1);
-}
-int main(){
-  int i,j;
-  scanf("%d %d",&n,&m);
-  char c;
-  int x,y;
-  for(i=0;i<m;i++){
-    scanf("%c %d %d\n",&c,&x,&y);
-    if(c=='C'){
-      update(x,y);
+map<int,double>a,b;
+map<int,double,greater<int>>mp;
+int main()
+{
+    int n,x;
+    double y;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x>>y;
+        a.insert(make_pair(x,y));
     }
-    else{
-      int sum=sumBetween(x,y);
-      cout<<sum<<endl;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x>>y;
+        b.insert(make_pair(x,y));
     }
-  }
+    for(map<int,double>::iterator it=a.begin();it!=a.end();it++)
+        for(map<int,double>::iterator st=b.begin();st!=b.end();st++)
+        {
+            x=it->first+st->first;
+            y=it->second*st->second;
+            if(mp.find(x)!=mp.end())
+                mp[x]+=y;
+            else
+                mp.insert(make_pair(x,y));
+        }
+    for(map<int,double,greater<int>>::iterator it=mp.begin();it!=mp.end();)
+    {
+        if(it->second==0)
+            it=mp.erase(it);
+        else
+            it++;
+    }
+    cout<<mp.size();
+    for(map<int,double,greater<int>>::iterator it=mp.begin();it!=mp.end();it++)
+        printf(" %d %.1f",it->first,it->second);
+    cout<<endl;
+    return 0;
 }
