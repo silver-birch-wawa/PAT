@@ -32,7 +32,6 @@ int binsearch(Node*stu,int id,int start,int ends){
     // 返回-1说明不存在这个id
   }
   if(stu[middle].id==id){
-    // 发现id对应的数组元素下标
     return middle;
   }
   else if(stu[middle].id>id){
@@ -44,7 +43,7 @@ int binsearch(Node*stu,int id,int start,int ends){
 }
 void search(Node*stu,int id){
   int i,a[4];
-  char b[4]={'A','C','M','E'};
+  char b[]={'A','C','M','E'};
   id=binsearch(stu,id,0,N-1);
   if(id==-1){
     cout<<"N/A"<<endl;
@@ -77,30 +76,85 @@ int main(int argc, char const *argv[]) {
     stu[i].gradeC=gradeC;
     stu[i].gradeM=gradeM;
     stu[i].gradeE=gradeE;
-    stu[i].gradeA=(gradeE+gradeC+gradeM)/3;
+    stu[i].gradeA=(gradeE+gradeC+gradeM);
   }
   // 对各个单项排序计算
-
-  // cout<<stu[0].gradeA<<"  "<<stu[0].gradeM;
   siganl=0;
+  int sum=0;
+  // 相同分数的student个数
   sort(stu,stu+N,cmp);
-  for(i=0;i<N;i++){
-    stu[i].rankA=i+1;
+  stu[0].rankA=1;
+  for(i=1;i<N;i++){
+    if(stu[i].gradeA==stu[i-1].gradeA){
+      sum++;
+      stu[i].rankA=stu[i-1].rankA;
+    }
+    else{
+      if(sum==0){
+        stu[i].rankA=stu[i-1].rankA+1;
+      }
+      else{
+        stu[i].rankA=stu[i-1].rankA+sum+1;
+        sum=0;
+      }
+    }
   }
   siganl=1;
   sort(stu,stu+N,cmp);
-  for(i=0;i<N;i++){
-    stu[i].rankC=i+1;
+  sum=0;
+  stu[0].rankC=1;
+  for(i=1;i<N;i++){
+    if(stu[i].gradeC==stu[i-1].gradeC){
+      sum++;
+      stu[i].rankC=stu[i-1].rankC;
+    }
+    else{
+      if(sum==0){
+        stu[i].rankC=stu[i-1].rankC+1;
+      }
+      else{
+        stu[i].rankC=stu[i-1].rankC+sum+1;
+        sum=0;
+      }
+    }
   }
   siganl=2;
   sort(stu,stu+N,cmp);
-  for(i=0;i<N;i++){
-    stu[i].rankM=i+1;
+  sum=0;
+  stu[0].rankM=1;
+  for(i=1;i<N;i++){
+    if(stu[i].gradeM==stu[i-1].gradeM){
+      sum++;
+      stu[i].rankM=stu[i-1].rankM;
+    }
+    else{
+      if(sum==0){
+        stu[i].rankM=stu[i-1].rankM+1;
+      }
+      else{
+        stu[i].rankM=stu[i-1].rankM+sum+1;
+        sum=0;
+      }
+    }
   }
   siganl=3;
   sort(stu,stu+N,cmp);
-  for(i=0;i<N;i++){
-    stu[i].rankE=i+1;
+  sum=0;
+  stu[0].rankE=1;
+  for(i=1;i<N;i++){
+    if(stu[i].gradeE==stu[i-1].gradeE){
+      sum++;
+      stu[i].rankE=stu[i-1].rankE;
+    }
+    else{
+      if(sum==0){
+        stu[i].rankE=stu[i-1].rankE+1;
+      }
+      else{
+        stu[i].rankE=stu[i-1].rankE+sum+1;
+        sum=0;
+      }
+    }
   }
   siganl=4;
   sort(stu,stu+N,cmp);
@@ -108,7 +162,6 @@ int main(int argc, char const *argv[]) {
   int input;
   for(j=0;j<M;j++){
     scanf("%d",&input);
-    // cout<<"______";
     if(input>stu[0].id||input<stu[N-1].id){
       cout<<"N/A"<<endl;
     }
@@ -116,20 +169,15 @@ int main(int argc, char const *argv[]) {
       search(stu,input);
     }
   }
-
-  for(i=0;i<N;i++){
-    cout<<stu[i].id<<" "<<stu[i].rankA<<" "<<stu[i].rankC<<" "<<stu[i].rankM<<" "<<stu[i].rankE<<endl;
-  }
-  for(i=0;i<N;i++){
-    cout<<stu[i].id<<" "<<stu[i].gradeA<<" "<<stu[i].gradeC<<" "<<stu[i].gradeM<<" "<<stu[i].gradeE<<endl;
-  }
   return 0;
 }
+
+
 /*
 5 6
 310101 91 85 88
 310102 99 95 88
-310103 82 93 90
+310103 82 87 90
 310104 91 93 91
 310105 89 91 90
 310101
