@@ -25,6 +25,37 @@ void chase_path(int x,int y){
     }
   }
 }
+void print(vector<int>vv){
+  int i;
+  cout<<"\nFull Path:  ";
+  for(i=vv.size()-1;i>=0;i--){
+    cout<<a[vv[i]]<<"-->";
+  }
+  //cout<<endl;
+}
+void tracefullpath(int i,int j,vector<int>vv){
+  if(i>=1&&j>=1){
+    if(a[i-1]==b[j-1]){
+      //cout<<"-->";
+      vv.push_back(i-1);
+      tracefullpath(i-1,j-1,vv);
+    }
+    else if(dp[i-1][j]==dp[i][j-1]){
+        tracefullpath(i-1,j,vv);
+        tracefullpath(i,j-1,vv);
+    }
+    else if(dp[i-1][j]>dp[i][j-1]){
+      tracefullpath(i-1,j,vv);
+    }
+    else{
+      tracefullpath(i,j-1,vv);
+    }
+  }
+  else{
+    print(vv);
+    return;
+  }
+}
 int main() {
   int i,j;
   scanf("%s %s",&a,&b);
@@ -47,6 +78,8 @@ int main() {
   }
   cout<<"\nCommon Length:"<<dp[len_a][len_b]<<endl;
   chase_path(len_a,len_b);
+  vector<int>vv;
+  tracefullpath(len_a,len_b,vv);
   return 0;
 }
 
