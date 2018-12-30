@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 左支小右支大
+// 锟斤拷支小锟斤拷支锟斤拷
 struct Node{
     Node* left;
     Node* right;
@@ -11,7 +11,7 @@ struct Node{
         num=0;
     }
 };
-// 插入
+// 锟斤拷锟斤拷
 void in(Node *root,int input){
     Node*p=root;
     if(root==NULL){
@@ -21,7 +21,7 @@ void in(Node *root,int input){
     }
     while(p!=NULL){
         //cout<<"bypass"<<endl;
-        if(input>(p->num)){   // 右大左小
+        if(input>(p->num)){   // 锟揭达拷锟斤拷小
             if(p->right==NULL){
                p->right=new Node();
                (p->right)->num=input;
@@ -42,22 +42,22 @@ void in(Node *root,int input){
         }
     }
 }
-// 查找右子树最小的节点（仅max于num的节点）
+// 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷小锟侥节点（锟斤拷max锟斤拷num锟侥节点）
 Node* findmax(Node*root){
     while(root->left!=NULL){
         root=root->left;
     }
     return root;
 }
-// 查找左子树最大的节点（仅min于num的节点）
+// 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟侥节点（锟斤拷min锟斤拷num锟侥节点）
 Node* findmin(Node*root){
     while(root->right!=NULL){
         root=root->right;
     }
     return root;
 }
-// 删除比较麻烦,需要查找小于该num或者大于该num的节点进行覆盖，但是为了避免节点置为NULL后树的通道中断了，就采取循环补漏的方式
-// 将最后一个遍历到的（一般是num最左/最右）置为空，拆西墙补东墙（因为删除之后空了一个元素）。
+// 删锟斤拷锟饺斤拷锟介烦,锟斤拷要锟斤拷锟斤拷小锟节革拷num锟斤拷锟竭达拷锟节革拷num锟侥节碉拷锟斤拷锟叫革拷锟角ｏ拷锟斤拷锟斤拷为锟剿憋拷锟斤拷锟节碉拷锟斤拷为NULL锟斤拷锟斤拷锟斤拷通锟斤拷锟叫讹拷锟剿ｏ拷锟酵诧拷取循锟斤拷锟斤拷漏锟侥凤拷式
+// 锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷锟侥ｏ拷一锟斤拷锟斤拷num锟斤拷锟斤拷/锟斤拷锟揭ｏ拷锟斤拷为锟秸ｏ拷锟斤拷锟斤拷墙锟斤拷锟斤拷墙锟斤拷锟斤拷为删锟斤拷之锟斤拷锟斤拷锟斤拷一锟斤拷元锟截ｏ拷锟斤拷
 void del(Node* &root,int num){
     Node* l;
     Node* r;
